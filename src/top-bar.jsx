@@ -1,7 +1,9 @@
 import React from 'react'
 
-const TopBar = () => (
-	null
-)
+class TopBar extends React.Component {
+	render() {
+		return <div className="top-bar" ><h1>Personal Finance</h1></div>
+    }
+}
 
-export default TopBar
+ export default TopBar
