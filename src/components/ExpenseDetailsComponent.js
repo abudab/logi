@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {connect} from 'react-redux'
 
 const ExpenseDetailsComponent = (props) => {
     return <div >
@@ -11,4 +11,10 @@ const ExpenseDetailsComponent = (props) => {
     </div>
 }
 
-export default ExpenseDetailsComponent
+const mapStateToProps = state => {
+    return {
+        data: state.expenses[state.selected]
+    }
+}
+
+export default connect(mapStateToProps)(ExpenseDetailsComponent);

@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {connect} from 'react-redux'
 function addAmount(a, b) {
     return a + parseFloat(b.amount.value);
 }
@@ -16,4 +16,9 @@ const TableRowSum = (props)=> {
     )
 
 }
-export default TableRowSum
+
+const mapStateToProps = (state) => {
+    return { data: Object.values(state.expenses) }
+}
+
+export default connect(mapStateToProps)(TableRowSum)

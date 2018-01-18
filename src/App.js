@@ -1,26 +1,26 @@
 import React from 'react'
 import TopBar from './top-bar'
 import ExpenseList from "./ExpenseList";
-import {expenses as initialExpenses} from "./data";
 import ContainerComponent from "./components/ContainerComponent";
 import ExpenseDetailsComponent from "./components/ExpenseDetailsComponent";
 import ExpenseForm from "./components/ExpenseForm";
 import ModalContainer from "./components/ModalContainer";
+import {connect} from "react-redux";
 
 class App extends React.Component {
 
-    constructor(props) {
-        super(props);
-        const elements = initialExpenses.reduce((acc, e) => {
-            acc[e.id] = e
-            return acc
-        }, {});
-        this.state = {
-            selectedElementId: initialExpenses[0].id,
-            expenses: elements,
-            showPopup: false
-        };
-    }
+    // constructor(props) {
+    //     super(props);
+    //     const elements = initialExpenses.reduce((acc, e) => {
+    //         acc[e.id] = e
+    //         return acc
+    //     }, {});
+    //     this.state = {
+    //         selectedElementId: initialExpenses[0].id,
+    //         expenses: elements,
+    //         showPopup: false
+    //     };
+    // }
 
     render() {
         return (
@@ -31,21 +31,20 @@ class App extends React.Component {
                     <div className='row fill-height'>
                         <div className='col-md-8'>
                             <ContainerComponent>
-                                <ExpenseDetailsComponent data={this.state.expenses[this.state.selectedElementId]}/>
+                                {<ExpenseDetailsComponent />}
                             </ContainerComponent>
                         </div>
                         <div className='col-md-8 pb-3'>
-                            <ExpenseList data={Object.values(this.state.expenses)}
-                                         onClick={this.changeSelectedItem}
-                                         onChangeStatus={this.changeStatus}
-                            />
+                            <ExpenseList />
                         </div>
-                        <div className='col-md-8 pb-3'>
+                        <div >
                             <input type="button" class="btn btn-primary" value="Add" onClick={this.showAddPopup}/>
                         </div>
                         <div>{
-                            this.state.showPopup ?
-                                <ModalContainer onClose={this.hideAddPopup}><ExpenseForm onAdd={this.onAdd}/></ModalContainer> : null
+                            this.props.state ?
+                                <ModalContainer onClose={this.hideAddPopup}>
+                                    <ExpenseForm onAdd={this.onAdd} />
+                                </ModalContainer> : null
                         }</div>
                     </div>
                 </div>
@@ -54,46 +53,38 @@ class App extends React.Component {
     }
 
     showAddPopup = () => {
-        this.setState({
-            showPopup: true
-        })
+        this.props.showPopup();
     }
 
     hideAddPopup = () => {
-        this.setState({
-            showPopup: false
-        })
+        this.props.closePopup();
     }
 
     onAdd = (values) => {
-        let expenses = Object.assign(this.state.expenses, {});
-        expenses[values.id] = values;
-        this.setState({
-            expenses: expenses,
-            showPopup: false
-        })
+        this.props.addExpense(values)
+        this.props.closePopup();
     }
+}
 
-    changeSelectedItem = (expense) => {
-        this.setState({
-            selectedElementId: expense.id
-        })
-    }
+const mapStateToProps = (state) => {
+    return {state:state.app}
+}
 
-    changeStatus = (expense) => {
-        const {expenses} = this.state
-
-        const updatedExpense = {...expense, status: !expense.status}
-        const updateExpenses = {
-            ...expenses,
-            [updatedExpense.id]: updatedExpense
-        }
-
-        this.setState({
-            expenses: updateExpenses
+const mapDispatchToProps = dispatch => {
+    return {
+        showPopup: () => dispatch({
+            type: 'SHOW_POPUP',
+            payload: ''
+        }),
+        closePopup: () => dispatch({
+            type: 'CLOSE_POPUP',
+            payload: ''
+        }),
+        addExpense: (expense) => dispatch({
+            type: 'ADD_EXPENSE',
+            payload: expense
         })
     }
 }
 
-
-export default App
+export default connect(mapStateToProps,mapDispatchToProps)(App)
