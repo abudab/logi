@@ -63,6 +63,7 @@ class App extends React.Component {
     onAdd = (values) => {
         this.props.addExpense(values)
         this.props.closePopup();
+        this.props.sortAndFilter({})
     }
 }
 
@@ -83,6 +84,10 @@ const mapDispatchToProps = dispatch => {
         addExpense: (expense) => dispatch({
             type: 'ADD_EXPENSE',
             payload: expense
+        }),
+        sortAndFilter: (sortData) => dispatch({
+            type: 'SORTandFILTER',
+            payload: sortData
         })
     }
 }

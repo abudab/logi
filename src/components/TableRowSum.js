@@ -18,7 +18,7 @@ const TableRowSum = (props)=> {
 }
 
 const mapStateToProps = (state) => {
-    return { data: Object.values(state.expenses) }
+    return { data: Object.values(state.expenses.expenses) }
 }
 
 export default connect(mapStateToProps)(TableRowSum)

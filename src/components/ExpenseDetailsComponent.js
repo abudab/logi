@@ -13,7 +13,7 @@ const ExpenseDetailsComponent = (props) => {
 
 const mapStateToProps = state => {
     return {
-        data: state.expenses[state.selected]
+        data: state.expenses.expenses[state.selected]
     }
 }
 
